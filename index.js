@@ -16,6 +16,11 @@ app.get('/style.css',(req,res)=>{
     res.sendFile(__dirname+'/public/style.css')
 })
 
+app.get('/lib/FirstPersonControls.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/FirstPersonControls.js')
+})
+
 app.listen(port, ()=>{
     console.log(`listening on port ${port}`)
 })
