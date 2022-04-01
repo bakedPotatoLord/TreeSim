@@ -2,7 +2,6 @@ const express = require('express')
 const app = new express
 
 const port = 3000
-var users =  new Map()
 
 function addUser(){
 
@@ -77,7 +76,7 @@ app.listen(port, ()=>{
 
 
 //websocket stuff
-const WebSocket = require('WS')
+const WebSocket = require('ws')
 const wss =  new WebSocket.Server({port:3001})
 
 const clients = new Map();
@@ -93,7 +92,11 @@ wss.on('connection', (ws) => {
         const metadata = clients.get(ws);
 
         message.sender = metadata.id;
-        message.color = metadata.color;
+        
+        
+        console.clear()
+        console.table(clients)
+
         const outbound = JSON.stringify(message);
 
         [...clients.keys()].forEach((client) => {
@@ -105,3 +108,21 @@ wss.on('connection', (ws) => {
         clients.delete(ws);
     });
 });
+
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+function loop(){
+    
+    console.clear()
+    console.table(clients)
+    setTimeout(loop(),1000)
+}
+
+//loop()
+
+
