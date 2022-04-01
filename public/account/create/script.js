@@ -9,5 +9,11 @@ form.onsubmit = function(e){
         alert('the two passwords do not match')
     }else if(user.value.split('').length <= 2 || pass.value.split('').length <= 2){
         alert('username and password must be longer that 2 characters')
+    }else{
+        alert('posting')
+        JSON.stringify({
+            user:user.value,
+            pass:pass.value
+        })
     }
 }
