@@ -49,9 +49,26 @@ app.get('/account/create/style.css',(req,res)=>{
     res.sendFile(__dirname+'/public/account/create/style.css')
 })
 
+//libraries
 app.get('/lib/PointerLockControls.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/PointerLockControls.js')
+})
+app.get('/lib/FBXLoader.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/FBXLoader.js')
+})
+app.get('/lib/fflate.module.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/fflate.module.js')
+})
+app.get('/lib/NURBScurve.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/NURBScurve.js')
+})
+app.get('/lib/NURBSutils.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/NURBSutils.js')
 })
 
 app.listen(port, ()=>{
@@ -61,7 +78,7 @@ app.listen(port, ()=>{
 
 //websocket stuff
 const WebSocket = require('WS')
-const wss = WebSocket.Server({port:3001})
+const wss =  new WebSocket.Server({port:3001})
 
 const clients = new Map();
 
