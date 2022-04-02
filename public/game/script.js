@@ -2,7 +2,8 @@ import * as THREE from 'three'
 import {PointerLockControls} from 'PointerLockControls';
 import { FBXLoader } from 'FBXLoader';
 
-const canvas = document.querySelector('canvas')
+let canvas = document.querySelector('canvas')
+let gui1 = document.getElementById('playersOnline')
 const keyObject = {w:false,a:false,s:false,d:false};
 
 var activePlayers = new Map()
@@ -139,14 +140,11 @@ function move(){
             }, 10);
         });
     }
-
     setInterval(sendMSG,22)
-
 })();
 
 function animate() {
     requestAnimationFrame( animate );
-    
     
     //draw other players
     drawplayers()
@@ -154,6 +152,17 @@ function animate() {
     move()
     //render scene locally
     renderer.render( scene, camera );
+
+    var tempTable = '<table>'
+    for(let i of activePlayers){
+        tempTable +=`
+            <tr>
+                <td>${i[0]}</td>
+
+            </tr>
+        `
+    }
+    gui1.innerHTML = tempTable+'</table>'
 };
 
 canvas.onclick =  function(e){
