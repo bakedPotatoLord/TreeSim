@@ -80,7 +80,7 @@ const clients = new Map();
 
 wss.on('connection', (ws) => {
     var id = uuidv4();
-    var metadata = { id };
+    var metadata = { id ,active:true};
 
     clients.set(ws, metadata);
 
@@ -89,10 +89,12 @@ wss.on('connection', (ws) => {
         const metadata = clients.get(ws);
 
         message.sender = metadata.id;
+        message.active = true;
         
         
         console.clear()
         console.table(clients)
+        //console.log(message)
 
         const outbound = JSON.stringify(message);
 
@@ -102,6 +104,16 @@ wss.on('connection', (ws) => {
     });
 
     ws.on("close", () => {
+        
+        //send that the client is logged off
+        [...clients.keys()].forEach((client) => {
+            client.send(JSON.stringify({
+                sender: clients.get(ws).id,
+                active:false,
+            }));
+        });
+
+        //delete client from map locally
         clients.delete(ws);
     });
 });
