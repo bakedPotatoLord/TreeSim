@@ -3,9 +3,6 @@ const app = new express
 
 const port = 3000
 
-function addUser(){
-
-}
 
 
 //game

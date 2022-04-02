@@ -6,7 +6,7 @@ const canvas = document.querySelector('canvas')
 const keyObject = {w:false,a:false,s:false,d:false};
 
 var activePlayers = new Map()
-var playerObjects = {}
+var playerObjects = new Map()
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -50,13 +50,23 @@ function drawplayers(){
     var geometry = new THREE.CylinderGeometry(0.5,0.5,2,50,10);
     var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('pink') } );
     for( let i of activePlayers){
-       
-        /*
+        console.log(playerObjects.size,activePlayers.size)
+        if(!playerObjects.has(i[0])){
+            //if not in objectMap yet
+            playerObjects.set(i[0],new THREE.Mesh( geometry, material ))
+            scene.add(playerObjects.get(i[0]))
+        }else{
+            //if both exist then update
+            playerObjects.get(i[0]).position.set(i[1][0],i[1][1],i[1][2])
+        }
         
-        activePlayers.get(i).shape = new THREE.Mesh( geometry, material );
-        scene.add( activePlayers.get(i).shape );
-        player.position.set(activePlayers.get(i).x,activePlayers.get(i).y,activePlayers.get(i).z)
-        */
+    }
+    for(let j of playerObjects){
+        if(!activePlayers.has(j[0])){
+            //if not is server Map
+            scene.remove(j[0])
+            playerObjects.delete(j[0])
+        }
     }
 }
 
@@ -80,9 +90,19 @@ function move(){
         camera.position.zv += 0.01
     }
 
+    //apply drag
     camera.position.xv *= (0.9)
     camera.position.zv *= (0.9)
 
+    //apply gravity
+    if(camera.position.y >= 1){
+        camera.position.yv -= 0.01
+    }else{
+        camera.position.yv = 0
+    }
+
+
+    camera.position.y += camera.position.yv
     controls.moveForward(camera.position.xv)
     controls.moveRight(camera.position.zv)
 }
@@ -95,7 +115,7 @@ function move(){
         var parsedMessage = JSON.parse(webSocketMessage.data)
         activePlayers.set(parsedMessage.sender,[parsedMessage.x,parsedMessage.y,parsedMessage.z])
 
-        console.log(activePlayers)
+        //console.log(activePlayers)
 
     };
 
@@ -122,9 +142,7 @@ function move(){
 function animate() {
     requestAnimationFrame( animate );
     
-    if(camera.position.y >= 1){
-        camera.position.y -= 0.1
-    }
+    
     //draw other players
     drawplayers()
     //move
