@@ -50,7 +50,6 @@ function drawplayers(){
     var geometry = new THREE.CylinderGeometry(0.5,0.5,2,50,10);
     var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('pink') } );
     for( let i of activePlayers){
-        console.log(playerObjects.size,activePlayers.size)
         if(!playerObjects.has(i[0])){
             //if not in objectMap yet
             playerObjects.set(i[0],new THREE.Mesh( geometry, material ))
@@ -63,8 +62,8 @@ function drawplayers(){
     }
     for(let j of playerObjects){
         if(!activePlayers.has(j[0])){
-            //if not is server Map
-            scene.remove(j[0])
+            //if not in server Map
+            scene.remove(j[1])
             playerObjects.delete(j[0])
         }
     }
@@ -113,9 +112,15 @@ function move(){
     
     ws.onmessage = (webSocketMessage) => {
         var parsedMessage = JSON.parse(webSocketMessage.data)
-        activePlayers.set(parsedMessage.sender,[parsedMessage.x,parsedMessage.y,parsedMessage.z])
+        if(parsedMessage.active){
+            activePlayers.set(parsedMessage.sender,[parsedMessage.x,parsedMessage.y,parsedMessage.z])
+        }else{
+            activePlayers.delete(parsedMessage.sender)
+        }
+        
 
         //console.log(activePlayers)
+        //console.log(parsedMessage)
 
     };
 
