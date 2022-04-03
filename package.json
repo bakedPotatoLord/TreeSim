@@ -1,5 +1,5 @@
 {
-  "name": "TreeSim",
+  "name": "treesim",
   "version": "1.0.0",
   "description": "A web based tree simulation using three.js",
   "main": "index.js",
