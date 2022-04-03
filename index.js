@@ -1,21 +1,32 @@
 const express = require('express')
 const fs = require('fs')
-const app = new express
+const app = new express()
+app.use(express.json());
 
 const port = 3000
 
-
-
-//game
 app.get('/',(req,res)=>{
-    res.sendFile(__dirname+'/public/game/index.html')
+    res.sendFile(__dirname+'/public/main/index.html')
 })
 
 app.get('/script.js',(req,res)=>{
-    res.sendFile(__dirname+'/public/game/script.js')
+    res.sendFile(__dirname+'/public/main/script.js')
 })
 
 app.get('/style.css',(req,res)=>{
+    res.sendFile(__dirname+'/public/main/style.css')
+})
+
+//game
+app.get('/game',(req,res)=>{
+    res.sendFile(__dirname+'/public/game/index.html')
+})
+
+app.get('/game/script.js',(req,res)=>{
+    res.sendFile(__dirname+'/public/game/script.js')
+})
+
+app.get('/game/style.css',(req,res)=>{
     res.sendFile(__dirname+'/public/game/style.css')
 })
 
@@ -59,6 +70,10 @@ app.get('/lib/fflate.module.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/fflate.module.js')
 })
+app.get('/lib/js-cookie.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/js-cookie.js')
+})
 app.get('/lib/NURBScurve.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/NURBScurve.js')
@@ -66,6 +81,41 @@ app.get('/lib/NURBScurve.js',(req,res)=>{
 app.get('/lib/NURBSutils.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/NURBSutils.js')
+})
+
+//handle POST requests
+
+app.post('/login',(req,res)=>{
+    console.log(req.body)
+
+    res.type('application/json')
+    fs.readFile('userData.json',(err,data)=>{
+        if(err) throw err;
+        const parsedData = JSON.parse(data).users
+
+        if(true){
+
+        }
+    })
+    res.json({message:'hello'})
+})
+
+app.post('/create',(req,res)=>{
+    console.log(req.body)
+    const post = JSON.parse(req.body)
+
+    res.type('application/json')
+    fs.readFile('userData.json',(err,data)=>{
+        if(err) throw err;
+        const parsedUsers = JSON.parse(data).users
+        console.log(parsedUsers)
+        for(i of parsedUsers){
+            if(i.user == post.user){
+                
+            }
+        }
+    })
+    res.json({message:'hello'})
 })
 
 app.listen(port, ()=>{
@@ -121,10 +171,17 @@ wss.on('connection', (ws) => {
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
     });
-  }
+}
+
+function mapToJson(map) {
+    return JSON.stringify([...map]);
+}
+function jsonToMap(jsonStr) {
+    return new Map(JSON.parse(jsonStr));
+}
 
 function loop(){
     
