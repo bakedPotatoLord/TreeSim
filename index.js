@@ -44,18 +44,6 @@ app.get('/leaderBoard/style.css',(req,res)=>{
     res.sendFile(__dirname+'/public/leaderboard/style.css')
 })
 
-//create acc
-app.get('/account/create',(req,res)=>{
-    res.sendFile(__dirname+'/public/account/create/index.html')
-})
-
-app.get('/account/create/script.js',(req,res)=>{
-    res.sendFile(__dirname+'/public/account/create/script.js')
-})
-
-app.get('/account/create/style.css',(req,res)=>{
-    res.sendFile(__dirname+'/public/account/create/style.css')
-})
 
 //libraries
 app.get('/lib/PointerLockControls.js',(req,res)=>{
@@ -86,36 +74,50 @@ app.get('/lib/NURBSutils.js',(req,res)=>{
 //handle POST requests
 
 app.post('/login',(req,res)=>{
-    console.log(req.body)
+    const post = req.body
 
     res.type('application/json')
     fs.readFile('userData.json',(err,data)=>{
         if(err) throw err;
-        const parsedData = JSON.parse(data).users
+        const userMap = jsonToMap(data)
 
-        if(true){
-
+        if(!userMap.has(post.user)){
+            res.json({error:'username username not found in database'})
+        }else if(userMap.get(post.user).pass != post.pass){
+            res.json({error:'incorrect password'})
+        }else{
+            res.cookie('uuid',userMap.get(post.user).uuid)
+            res.json({message:'success'})
+            console.log('successful login')
         }
     })
-    res.json({message:'hello'})
 })
 
 app.post('/create',(req,res)=>{
     console.log(req.body)
-    const post = JSON.parse(req.body)
+    const post = req.body
 
     res.type('application/json')
     fs.readFile('userData.json',(err,data)=>{
         if(err) throw err;
-        const parsedUsers = JSON.parse(data).users
-        console.log(parsedUsers)
-        for(i of parsedUsers){
-            if(i.user == post.user){
-                
-            }
+        const userMap = jsonToMap(data)
+        if(post.user.split('').length <= 2){
+            res.json({error:'username must be more than two characters'})
+        }else if(post.pass.split('').length <= 4){
+            res.json({error:'password must be more than four characters'})
+        }else if(userMap.has(post.user)){
+            res.json({error:'username already in use'})
+        }else{
+            const details= {uuid:uuidv4(),pass:post.pass,}
+            res.cookie('uuid',details.uuid)
+            userMap.set(post.user,details)
+            fs.writeFile('userData.json',mapToJson(userMap),()=>{
+                res.json({message:'success'})
+                console.log('successfull acct creation')
+            })
         }
     })
-    res.json({message:'hello'})
+    
 })
 
 app.listen(port, ()=>{
@@ -182,6 +184,8 @@ function mapToJson(map) {
 function jsonToMap(jsonStr) {
     return new Map(JSON.parse(jsonStr));
 }
+
+
 
 function loop(){
     
