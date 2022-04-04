@@ -4,7 +4,8 @@ let signUpForm = document.querySelector('.signup form')
 
 guestForm.onsubmit = function(e){
     e.preventDefault()
-    console.log(e)
+    console.log('guestlogin clicked')
+    window.location.replace("/game");
 }
 
 loginForm.onsubmit = function(e){
@@ -26,7 +27,14 @@ loginForm.onsubmit = function(e){
     })
     .then(response => response.json())
     .then(data => {
-    console.log('Success:', data);
+    if(data.error){
+        alert(data.error)
+    }else{
+        if(data.message == 'success'){
+            alert('Success. You will be redirected when you close this message.')
+            window.location.replace("/game");
+        }
+    }
     })
     .catch((error) => {
     console.error('Error:', error);
@@ -50,9 +58,16 @@ signUpForm.onsubmit = function(e){
         })
         .then(response => response.json())
         .then(data => {
-        console.log('Success:', data);
+            if(data.error){
+                alert(data.error)
+            }else{
+                if(data.message == 'success'){
+                    alert('Success. You will be redirected when you close this message.')
+                    window.location.replace("/game");
+                }
+            }
         })
         .catch((error) => {
-        console.error('Error:', error);
+            console.error('Error:', error);
         });
 }
