@@ -20,6 +20,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
+    "three": "^0.139.2",
+    "websocket": "^1.0.34",
     "ws": "^8.5.0"
   }
 }

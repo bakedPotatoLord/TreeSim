@@ -47,6 +47,20 @@ var sphere = new THREE.Mesh( geometry, material );
 scene.add( sphere );
 sphere.position.set(0,0,0)
 
+//loader = new FBXLoader()
+
+/*
+loader.load( 'models/fbx/myModel.fbx', function ( object ) {
+
+    scene.add( object );
+
+}, undefined, function ( e ) {
+
+  console.error( e );
+
+} );
+*/
+
 function drawplayers(){
     var geometry = new THREE.CylinderGeometry(0.5,0.5,2,50,10);
     var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('pink') } );
