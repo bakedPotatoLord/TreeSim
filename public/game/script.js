@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import {PointerLockControls} from 'PointerLockControls';
 import { FBXLoader } from 'FBXLoader';
+import { GLTFLoader } from 'GLTFLoader';
 
 let canvas = document.querySelector('canvas')
 let gui1 = document.getElementById('playersOnline')
@@ -22,11 +23,31 @@ controls.connect()
 
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default 
 document.body.appendChild( renderer.domElement );
 
 //add light
-const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+const light = new THREE.DirectionalLight( 0xffffff, 0.5, 100 );
+light.position.set( 0, 10, 0 );
+light.castShadow = true; // default false
 scene.add( light );
+
+//add ambient light
+const Alight = new THREE.AmbientLight( 0xffffff, 0.5, 100 );
+Alight.position.set( 0, 10, 0 );
+Alight.castShadow = false; // default false
+scene.add( Alight );
+
+//Create a helper for the shadow camera (optional)
+const helper = new THREE.CameraHelper( light.shadow.camera );
+scene.add( helper );
+
+//Set up shadow properties for the light
+light.shadow.mapSize.width = 512; // default
+light.shadow.mapSize.height = 512; // default
+light.shadow.camera.near = 0.5; // default
+light.shadow.camera.far = 500; // default
 
 //add fog
 scene.fog = new THREE.Fog(new THREE.Color('blue'))
@@ -34,32 +55,37 @@ scene.fog = new THREE.Fog(new THREE.Color('blue'))
 //add background
 scene.background = new THREE.Color('lightblue')
 
+
+//add sphere
+var geometry = new THREE.SphereGeometry(1,50,50);
+var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('brown') } );
+var sphere = new THREE.Mesh( geometry, material );
+sphere.castShadow = true; //default is false
+sphere.receiveShadow = false; //default
+scene.add( sphere );
+sphere.position.set(0,5,0)
+
+//add plane that recives shadows
 var geometry = new THREE.PlaneGeometry(15,15,10,10);
 var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('lime') } );
 var plane = new THREE.Mesh( geometry, material );
+plane.receiveShadow = true;
 scene.add( plane );
 plane.position.set(0,0,0)
 plane.rotateX(-Math.PI/2)
 
-var geometry = new THREE.SphereGeometry(1,20,20);
-var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('brown') } );
-var sphere = new THREE.Mesh( geometry, material );
-scene.add( sphere );
-sphere.position.set(0,0,0)
+const loader = new GLTFLoader();
 
-//loader = new FBXLoader()
+loader.load( 'models/tree.glb', function ( gltf ) {
 
-/*
-loader.load( 'models/fbx/myModel.fbx', function ( object ) {
+	scene.add( gltf.scene );
 
-    scene.add( object );
+}, undefined, function ( error ) {
 
-}, undefined, function ( e ) {
-
-  console.error( e );
+	console.error( error );
 
 } );
-*/
+
 
 function drawplayers(){
     var geometry = new THREE.CylinderGeometry(0.5,0.5,2,50,10);
