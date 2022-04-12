@@ -70,6 +70,15 @@ app.get('/lib/NURBSutils.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/NURBSutils.js')
 })
+app.get('/lib/GLTFLoader.js',(req,res)=>{
+    res.type('application/javascript')
+    res.sendFile(__dirname+'/public/lib/NURBSutils.js')
+})
+
+//give models
+app.get('/models/tree.glb',(req,res)=>{
+    res.sendFile(__dirname+'/public/lib/NURBSutils.js')
+})
 
 //handle POST requests
 
