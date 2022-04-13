@@ -46,43 +46,31 @@ app.get('/leaderBoard/style.css',(req,res)=>{
 
 
 //libraries
-app.get('/lib/PointerLockControls.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/PointerLockControls.js')
-})
-app.get('/lib/FBXLoader.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/FBXLoader.js')
-})
-app.get('/lib/fflate.module.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/fflate.module.js')
-})
+
 app.get('/lib/js-cookie.js',(req,res)=>{
     res.type('application/javascript')
     res.sendFile(__dirname+'/public/lib/js-cookie.js')
 })
-app.get('/lib/NURBScurve.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/NURBScurve.js')
-})
-app.get('/lib/NURBSutils.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/NURBSutils.js')
-})
-app.get('/lib/GLTFLoader.js',(req,res)=>{
-    res.type('application/javascript')
-    res.sendFile(__dirname+'/public/lib/GLTFLoader.js')
-})
 
-app.get('/three/:path',(req,res)=>{
+app.get('/three/*',(req,res)=>{
     //res.type('application/javascript')
-    res.sendFile(__dirname+`/public/three/${req.params.path}`)
+    //console.log(req.params[0])
+    try{
+        res.sendFile(__dirname+`/public/three/${req.params[0]}`)
+    }catch(err){
+        res.send(err)
+    }
 })
 
 //give models
-app.get('/models/tree.glb',(req,res)=>{
-    res.sendFile(__dirname+'/public/models/tree.glb')
+app.get('/models/*',(req,res)=>{
+    //res.type('application/javascript')
+    //console.log(req.params[0])
+    try{
+        res.sendFile(__dirname+`/public/models/${req.params[0]}`)
+    }catch(err){
+        res.send(err)
+    }
 })
 
 //handle POST requests

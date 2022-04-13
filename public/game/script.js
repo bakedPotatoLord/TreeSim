@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import {PointerLockControls} from 'PointerLockControls';
-import { GLTFLoader } from 'GLTFLoader';
+import {PointerLockControls} from '/three/examples/jsm/controls/PointerLockControls.js';
+import { GLTFLoader } from '/three/examples/jsm/loaders/GLTFLoader.js';
 
-import { MTLLoader } from '../../jsm/loaders/MTLLoader.js';
-import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+import { MTLLoader } from '/three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from '/three/examples/jsm/loaders/OBJLoader.js';
 
 
 let canvas = document.querySelector('canvas')
@@ -58,6 +58,8 @@ scene.fog = new THREE.Fog(new THREE.Color('blue'))
 //add background
 scene.background = new THREE.Color('lightblue')
 
+//add textureloader
+const textureLoader = new THREE.TextureLoader()
 
 //add sphere
 var geometry = new THREE.SphereGeometry(1,50,50);
@@ -70,7 +72,11 @@ sphere.position.set(3,5,3)
 
 //add plane that recives shadows
 var geometry = new THREE.PlaneGeometry(15,15,10,10);
-var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('lime') } );
+var material = new THREE.MeshStandardMaterial( {
+        //color:new THREE.Color('lime') 
+        map: textureLoader.load( 'models/grass/texture.jpg' ),
+        normalMap: textureLoader.load( 'models/grass/normalMap.jpeg' ),
+    } );
 var plane = new THREE.Mesh( geometry, material );
 plane.receiveShadow = true;
 scene.add( plane );
@@ -80,7 +86,7 @@ plane.rotateX(-Math.PI/2)
 
 let loader = new GLTFLoader();
 
-loader.load( './models/tree.glb', function ( gltf ) {
+loader.load( './models/tree/tree.glb', function ( gltf ) {
 
 	const tree = gltf.scene
 	tree.castShadow = true; //default is false
