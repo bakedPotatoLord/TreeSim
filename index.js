@@ -59,7 +59,7 @@ app.get('/three/*',(req,res)=>{
     //res.type('application/javascript')
     //console.log(req.params[0])
     try{
-        res.sendFile(__dirname+`/public/three/${req.params[0]}`)
+        res.sendFile(__dirname+`/node_modules/three/${req.params[0]}`)
     }catch(err){
         res.send(err)
     }
