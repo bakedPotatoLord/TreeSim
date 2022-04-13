@@ -88,16 +88,16 @@ let loader = new GLTFLoader();
 
 loader.load( './models/tree/tree.glb', function ( gltf ) {
 
-	const tree = gltf.scene
+	const tree = gltf.scene.children[0]
 	tree.castShadow = true; //default is false
 	tree.receiveShadow = false; //default
 	tree.position.set(0,0,0)
 	tree.rotateX(-Math.PI/2)
 	tree.scale.set( 0.5, 0.5, 0.5 );
 	tree.material = new THREE.MeshPhongMaterial( {
-						//pecular: 0x111111,
-						//map: textureLoader.load( 'models/gltf/LeePerrySmith/Map-COL.jpg' ),
-					} );
+        //pecular: 0x111111,
+        color:new THREE.Color('#47361f')
+    } );
 	scene.add( tree);
 
 }, undefined, function ( error ) {
