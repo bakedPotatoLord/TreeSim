@@ -3,6 +3,7 @@ import {PointerLockControls} from 'PointerLockControls';
 import { FBXLoader } from 'FBXLoader';
 import { GLTFLoader } from 'GLTFLoader';
 
+
 let canvas = document.querySelector('canvas')
 let gui1 = document.getElementById('playersOnline')
 const keyObject = {w:false,a:false,s:false,d:false};
@@ -63,7 +64,7 @@ var sphere = new THREE.Mesh( geometry, material );
 sphere.castShadow = true; //default is false
 sphere.receiveShadow = false; //default
 scene.add( sphere );
-sphere.position.set(0,5,0)
+sphere.position.set(3,5,3)
 
 //add plane that recives shadows
 var geometry = new THREE.PlaneGeometry(15,15,10,10);
@@ -74,17 +75,50 @@ scene.add( plane );
 plane.position.set(0,0,0)
 plane.rotateX(-Math.PI/2)
 
-const loader = new GLTFLoader();
 
-loader.load( 'models/tree.glb', function ( gltf ) {
+let loader = new GLTFLoader();
 
-	scene.add( gltf.scene );
+loader.load( './models/tree.glb', function ( gltf ) {
+
+	const tree = gltf.scene
+	tree.castShadow = true; //default is false
+	tree.receiveShadow = false; //default
+	tree.position.set(0,0,0)
+	tree.rotateX(-Math.PI/2)
+	tree.scale.set( 0.5, 0.5, 0.5 );
+	tree.material = new THREE.MeshPhongMaterial( {
+						//pecular: 0x111111,
+						//map: textureLoader.load( 'models/gltf/LeePerrySmith/Map-COL.jpg' ),
+					} );
+	scene.add( tree);
 
 }, undefined, function ( error ) {
 
 	console.error( error );
 
 } );
+
+//using new loader
+/*
+new MTLLoader()
+					.setPath( 'models/obj/male02/' )
+					.load( 'male02.mtl', function ( materials ) {
+
+						materials.preload();
+
+						new OBJLoader()
+							.setMaterials( materials )
+							.setPath( 'models/obj/male02/' )
+							.load( 'male02.obj', function ( object ) {
+
+								object.position.y = - 95;
+								scene.add( object );
+
+							}, onProgress );
+
+					} );
+
+				*/
 
 
 function drawplayers(){
@@ -130,15 +164,19 @@ function move(){
         camera.position.zv += 0.01
     }
 
+	if(keyObject.space ){
+        camera.position.yv = 0.1
+    }
+
     //apply drag
     camera.position.xv *= (0.9)
     camera.position.zv *= (0.9)
 
     //apply gravity
-    if(camera.position.y >= 1){
+    if(camera.position.y > 1){
         camera.position.yv -= 0.01
     }else{
-        camera.position.yv = 0
+        camera.position.y = 1
     }
 
 
@@ -216,26 +254,38 @@ canvas.onclick =  function(e){
 }
 //document.addEventListener('keydown', logKey);
 document.onkeydown = function(e){
-    if(e.key == 'w'){
-        keyObject.w = true;
-    }else if(e.key == 'a'){
-        keyObject.a = true;
-    }else if(e.key == 's'){
-        keyObject.s = true;
-    }else if(e.key == 'd'){
-        keyObject.d = true;
-    }
+  if(e.key == 'w'){
+    keyObject.w = true;
+  }
+	if(e.key == 'a'){
+    keyObject.a = true;
+	}
+  if(e.key == 's'){
+    keyObject.s = true;
+	}
+  if(e.key == 'd'){
+		keyObject.d = true;
+	}
+	if(e.key == ' '){
+		keyObject.space = true;
+	}
 }
 document.onkeyup = function(e){
-    if(e.key == 'w'){
-        keyObject.w = false;
-    }else if(e.key == 'a'){
-        keyObject.a = false;
-    }else if(e.key == 's'){
-        keyObject.s = false;
-    }else if(e.key == 'd'){
-        keyObject.d = false;
-    }
+  if(e.key == 'w'){
+    keyObject.w = false;
+  }
+	if(e.key == 'a'){
+    keyObject.a = false;
+	}
+  if(e.key == 's'){
+    keyObject.s = false;
+	}
+  if(e.key == 'd'){
+		keyObject.d = false;
+	}
+	if(e.key == ' '){
+		keyObject.space = false;
+	}
 }
 
 animate();
