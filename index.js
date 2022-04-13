@@ -30,6 +30,9 @@ app.get('/game/style.css',(req,res)=>{
     res.sendFile(__dirname+'/public/game/style.css')
 })
 
+app.get('/game/favicon.ico',(req,res)=>{
+    res.sendFile(__dirname+'/public/game/media/icon.ico')
+})
 
 //leaderboard
 app.get('/leaderBoard',(req,res)=>{
