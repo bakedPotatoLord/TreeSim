@@ -61,20 +61,15 @@ scene.background = new THREE.Color('lightblue')
 //add textureloader
 const textureLoader = new THREE.TextureLoader()
 
-//add sphere
-var geometry = new THREE.SphereGeometry(1,50,50);
-var material = new THREE.MeshStandardMaterial( { color:new THREE.Color('brown') } );
-var sphere = new THREE.Mesh( geometry, material );
-sphere.castShadow = true; //default is false
-sphere.receiveShadow = false; //default
-scene.add( sphere );
-sphere.position.set(3,5,3)
-
+var grassMap = textureLoader.load( 'models/grass/texture.jpg' )
+grassMap.wrapS = THREE.RepeatWrapping;
+grassMap.wrapT = THREE.RepeatWrapping;
+grassMap.repeat.set( 10, 10 );
 //add plane that recives shadows
 var geometry = new THREE.PlaneGeometry(15,15,10,10);
 var material = new THREE.MeshStandardMaterial( {
         //color:new THREE.Color('lime') 
-        map: textureLoader.load( 'models/grass/texture.jpg' ),
+        map: grassMap,
         normalMap: textureLoader.load( 'models/grass/normalMap.jpeg' ),
     } );
 var plane = new THREE.Mesh( geometry, material );
