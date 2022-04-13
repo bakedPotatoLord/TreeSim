@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import {PointerLockControls} from 'PointerLockControls';
 import { GLTFLoader } from 'GLTFLoader';
 
-import { MTLLoader } from '../lib/MTLLoader.js';
-import { OBJLoader } from '../lib/OBJLoader.js';
+import { MTLLoader } from '../../jsm/loaders/MTLLoader.js';
+import { OBJLoader } from './jsm/loaders/OBJLoader.js';
 
 
 let canvas = document.querySelector('canvas')

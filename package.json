@@ -19,6 +19,7 @@
   "homepage": "https://github.com/bakedPotatoLord/TreeSim#readme",
   "dependencies": {
     "express": "^4.17.3",
+    "three": "^0.139.2",
     "ws": "^8.5.0"
   }
 }
