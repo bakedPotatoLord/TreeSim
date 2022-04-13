@@ -1,7 +1,9 @@
 import * as THREE from 'three'
 import {PointerLockControls} from 'PointerLockControls';
-import { FBXLoader } from 'FBXLoader';
 import { GLTFLoader } from 'GLTFLoader';
+
+import { MTLLoader } from '../lib/MTLLoader.js';
+import { OBJLoader } from '../lib/OBJLoader.js';
 
 
 let canvas = document.querySelector('canvas')
