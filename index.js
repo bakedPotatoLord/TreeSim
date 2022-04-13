@@ -75,6 +75,11 @@ app.get('/lib/GLTFLoader.js',(req,res)=>{
     res.sendFile(__dirname+'/public/lib/GLTFLoader.js')
 })
 
+app.get('/three/:path',(req,res)=>{
+    //res.type('application/javascript')
+    res.sendFile(__dirname+`/public/three/${req.params.path}`)
+})
+
 //give models
 app.get('/models/tree.glb',(req,res)=>{
     res.sendFile(__dirname+'/public/models/tree.glb')
